@@ -26,7 +26,6 @@ public class ClassUtils {
 
     /**
      * 获取类加载器
-     * @return
      */
     public static ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
@@ -36,7 +35,6 @@ public class ClassUtils {
      * 加载类
      * @param className
      * @param isInitialized 是否执行类的静态代码块 若要提高性能 可将参数设置为false
-     * @return
      */
     public static Class<?> loadClass(String className, boolean isInitialized) {
         Class<?> clazz = null;
@@ -52,7 +50,6 @@ public class ClassUtils {
     /**
      * 获取指定包下所有类
      * @param packageName
-     * @return
      */
     public static Set<Class<?>> getClassSet(String packageName) {
         Set<Class<?>> classSet = new HashSet<>();

@@ -17,7 +17,6 @@ public final class ConfigHelper {
 
     /**
      * 获取
-     * @return
      */
     public static String getJdbcDriver() {
         return PropsUtils.getString(CONFIG_PROPS, ConfigConstant.JDBC_DRIVER);
