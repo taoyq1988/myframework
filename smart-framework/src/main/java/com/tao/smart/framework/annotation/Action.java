@@ -15,7 +15,6 @@ public @interface Action {
 
     /**
      * 请求类型和路径
-     * @return
      */
     String value();
 }
