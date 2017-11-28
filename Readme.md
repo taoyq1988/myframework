@@ -11,7 +11,7 @@ chapter写项目实例<br>
 
 ## step second
 编写utils、helper、bean等，以及mvc最核心的DispatcherServlet，完成Ioc部分
-添加了测试但是不成功
+测试成功 现会对所以资源拦截 做到请求转发功能
 
-## step thrid
+## step third
 编写aop

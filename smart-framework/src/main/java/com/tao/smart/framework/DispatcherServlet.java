@@ -105,9 +105,9 @@ public class DispatcherServlet extends HttpServlet {
                         request.getRequestDispatcher(ConfigHelper.getAppJspPath() + path).forward(request, response);
                     }
                 }
-            } else if (request instanceof Data) {
+            } else if (result instanceof Data) {
                 //返回json数据
-                Data data = (Data) request;
+                Data data = (Data) result;
                 Object model = data.getModel();
                 if (model != null) {
                     response.setContentType("application/json");
