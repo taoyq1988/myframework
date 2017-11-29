@@ -14,4 +14,7 @@ chapter写项目实例<br>
 测试成功 现会对所以资源拦截 做到请求转发功能
 
 ## step third
-编写aop
+编写aop 使用代理<br>
+cglib的代理学习 https://www.cnblogs.com/cenyu/p/6289209.html<br>
+用jdk的动态代理 代理对象不需要实现接口,但是目标对象一定要实现接口,否则不能用动态代理<br>
+cglib代理:也叫作子类代理,它是在内存中构建一个子类对象从而实现对目标对象功能的扩展<br>

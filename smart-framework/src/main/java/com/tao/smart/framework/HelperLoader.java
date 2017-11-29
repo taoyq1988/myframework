@@ -1,9 +1,6 @@
 package com.tao.smart.framework;
 
-import com.tao.smart.framework.helper.BeanHelper;
-import com.tao.smart.framework.helper.ClassHelper;
-import com.tao.smart.framework.helper.ControllerHelper;
-import com.tao.smart.framework.helper.IocHelper;
+import com.tao.smart.framework.helper.*;
 import com.tao.smart.framework.utils.ClassUtils;
 
 /**
@@ -18,6 +15,7 @@ public final class HelperLoader {
         Class<?>[] classList = {
                 ClassHelper.class,
                 BeanHelper.class,
+                AopHelper.class,
                 IocHelper.class,
                 ControllerHelper.class
         };

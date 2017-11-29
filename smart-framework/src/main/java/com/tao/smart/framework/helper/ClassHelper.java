@@ -4,6 +4,7 @@ import com.tao.smart.framework.annotation.Controller;
 import com.tao.smart.framework.annotation.Service;
 import com.tao.smart.framework.utils.ClassUtils;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,32 @@ public final class ClassHelper {
      */
     public static Set<Class<?>> getClassSet() {
         return CLASS_SET;
+    }
+
+    /**
+     * 获取应用包下某父类或接口的所有子类(实现类)
+     */
+    public static Set<Class<?>> getClassSetBySuper(Class<?> superClass) {
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> clazz : CLASS_SET) {
+            if (superClass.isAssignableFrom(clazz) && !superClass.equals(clazz)) {
+                classSet.add(clazz);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 获取应用包下所有带有某注解的类
+     */
+    public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass) {
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> clazz : CLASS_SET) {
+            if (clazz.isAnnotationPresent(annotationClass)) {
+                classSet.add(clazz);
+            }
+        }
+        return classSet;
     }
 
     /**
