@@ -65,7 +65,7 @@ public class DispatcherServlet extends HttpServlet {
             Object controllerBean = BeanHelper.getBean(controllerClass);
             //创建请求参数对象
             Map<String, Object> paramMap = new HashMap<>();
-            Enumeration<String> paramNames = request.getAttributeNames();
+            Enumeration<String> paramNames = request.getParameterNames();
             while (paramNames.hasMoreElements()) {
                 String paramName = paramNames.nextElement();
                 String paramValue = request.getParameter(paramName);
