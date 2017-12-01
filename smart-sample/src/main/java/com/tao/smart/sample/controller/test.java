@@ -24,7 +24,7 @@ public class test {
         System.out.println(s);
         System.out.println(testService);
         testService.hello("tom");
-        String str = (String) param.getParamMap().get("name");
+        String str = param.getString("name");
         System.out.println(str);
         Data data = new Data(str);
         return data;

@@ -4,9 +4,7 @@ import com.tao.smart.framework.bean.Data;
 import com.tao.smart.framework.bean.Handler;
 import com.tao.smart.framework.bean.Param;
 import com.tao.smart.framework.bean.View;
-import com.tao.smart.framework.helper.BeanHelper;
-import com.tao.smart.framework.helper.ConfigHelper;
-import com.tao.smart.framework.helper.ControllerHelper;
+import com.tao.smart.framework.helper.*;
 import com.tao.smart.framework.utils.CodeUtils;
 import com.tao.smart.framework.utils.JsonUtils;
 import com.tao.smart.framework.utils.ReflectionUtils;
@@ -64,61 +62,79 @@ public class DispatcherServlet extends HttpServlet {
             Class<?> controllerClass = handler.getControllerClass();
             Object controllerBean = BeanHelper.getBean(controllerClass);
             //创建请求参数对象
-            Map<String, Object> paramMap = new HashMap<>();
-            Enumeration<String> paramNames = request.getParameterNames();
-            while (paramNames.hasMoreElements()) {
-                String paramName = paramNames.nextElement();
-                String paramValue = request.getParameter(paramName);
-                paramMap.put(paramName, paramValue);
+//            Map<String, Object> paramMap = new HashMap<>();
+//            Enumeration<String> paramNames = request.getParameterNames();
+//            while (paramNames.hasMoreElements()) {
+//                String paramName = paramNames.nextElement();
+//                String paramValue = request.getParameter(paramName);
+//                paramMap.put(paramName, paramValue);
+//            }
+//            String body = CodeUtils.encodeURL(StreamUtils.getString(request.getInputStream()));
+//            if (StringUtils.isNotEmpty(body)) {
+//                String[] params = StringUtils.split(body, "&");
+//                if (ArrayUtils.isNotEmpty(params)) {
+//                    for (String param : params) {
+//                        String[] array = StringUtils.split(param, "=");
+//                        if (ArrayUtils.isNotEmpty(array) && array.length == 2) {
+//                            String paramName = array[0];
+//                            String paramValue = array[1];
+//                            paramMap.put(paramName, paramValue);
+//                        }
+//                    }
+//                }
+//            }
+            Param param;
+            if (UploadHelper.isMultipart(request)) {
+                param = UploadHelper.createParam(request);
+            } else {
+                param = RequestHelper.createParam(request);
             }
-            String body = CodeUtils.encodeURL(StreamUtils.getString(request.getInputStream()));
-            if (StringUtils.isNotEmpty(body)) {
-                String[] params = StringUtils.split(body, "&");
-                if (ArrayUtils.isNotEmpty(params)) {
-                    for (String param : params) {
-                        String[] array = StringUtils.split(param, "=");
-                        if (ArrayUtils.isNotEmpty(array) && array.length == 2) {
-                            String paramName = array[0];
-                            String paramValue = array[1];
-                            paramMap.put(paramName, paramValue);
-                        }
-                    }
-                }
-            }
+
             //调用action方法
-            Param param = new Param(paramMap);
             Method actionMethod = handler.getActionMethod();
-            Object result = ReflectionUtils.invokeMethod(controllerBean, actionMethod, param);
+            Object result;
+            if (param.isEmpty()) {
+                result = ReflectionUtils.invokeMethod(controllerBean, actionMethod);
+            } else {
+                result = ReflectionUtils.invokeMethod(controllerBean, actionMethod, param);
+            }
+
             //处理action方法返回值
             if (result instanceof View) {
-                //返回jsp对象
-                View view = (View) result;
-                String path = view.getPath();
-                if (StringUtils.isNotEmpty(path)) {
-                    if (path.startsWith("/")) {
-                        response.sendRedirect(request.getContextPath() + path);
-                    } else {
-                        Map<String, Object> model = view.getModel();
-                        for (Map.Entry<String, Object> entry : model.entrySet()) {
-                            request.setAttribute(entry.getKey(), entry.getValue());
-                        }
-                        request.getRequestDispatcher(ConfigHelper.getAppJspPath() + path).forward(request, response);
-                    }
-                }
+                handleViewResult((View) result, request, response);
             } else if (result instanceof Data) {
-                //返回json数据
-                Data data = (Data) result;
-                Object model = data.getModel();
-                if (model != null) {
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    PrintWriter writer = response.getWriter();
-                    String json = JsonUtils.toJson(model);
-                    writer.write(json);
-                    writer.flush();
-                    writer.close();
-                }
+                handleDataResult((Data) result, request, response);
             }
+        }
+    }
+
+    private void handleViewResult(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        //返回jsp对象
+        String path = view.getPath();
+        if (StringUtils.isNotEmpty(path)) {
+            if (path.startsWith("/")) {
+                response.sendRedirect(request.getContextPath() + path);
+            } else {
+                Map<String, Object> model = view.getModel();
+                for (Map.Entry<String, Object> entry : model.entrySet()) {
+                    request.setAttribute(entry.getKey(), entry.getValue());
+                }
+                request.getRequestDispatcher(ConfigHelper.getAppJspPath() + path).forward(request, response);
+            }
+        }
+    }
+
+    private void handleDataResult(Data data, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //返回json数据
+        Object model = data.getModel();
+        if (model != null) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter writer = response.getWriter();
+            String json = JsonUtils.toJson(model);
+            writer.write(json);
+            writer.flush();
+            writer.close();
         }
     }
 }
