@@ -103,7 +103,7 @@ public class UploadHelper {
             LOGGER.error("create Param failure",e);
             throw new RuntimeException(e);
         }
-        return  new Param(formParamList, fileParamList);
+        return new Param(formParamList, fileParamList);
     }
 
     /**

@@ -66,7 +66,7 @@ public class RequestHelper {
     }
 
     /**
-     * 从流中解析参数。这里我还是没有明白 什么情况下会在流中出现这样类似的格式的字段，只知道xml的可以从流中解析出来
+     * 从流中解析参数
      * @return
      */
     private static List<FormParam> parseInputStream(HttpServletRequest request) throws IOException {

@@ -18,15 +18,15 @@ public class test {
     @Inject
     private TestServiceImpl testService;
 
-    @Action("get:/test")
+    @Action("post:/test")
     public Data testData(Param param) {
         String s = "------------------success------------------------";
         System.out.println(s);
         System.out.println(testService);
         testService.hello("tom");
-        String str = param.getString("name");
+        String str = param.getString("data");
         System.out.println(str);
-        Data data = new Data(str);
+        Data data = new Data(param);
         return data;
     }
 }

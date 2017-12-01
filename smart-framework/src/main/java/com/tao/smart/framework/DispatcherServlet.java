@@ -31,7 +31,10 @@ import java.util.Map;
  * 请求转发器
  *
  * @author tyq
- * @version 1.0, 2017/11/27
+ * @version 1.1, 2017/11/27
+ *
+ * 1.0 基本请求参数获取
+ * 1.1 将请求参数获取剥离到RequestHelper和UploadHelper中 分别对应普通参数和文件参数
  */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
