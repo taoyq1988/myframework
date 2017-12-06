@@ -19,7 +19,7 @@ import java.util.List;
  * @author tyq
  * @version 1.0, 2017/12/1
  */
-public class RequestHelper {
+public final class RequestHelper {
 
     public static Param createParam(HttpServletRequest request) throws IOException {
         List<FormParam> formParamList = new ArrayList<>();
